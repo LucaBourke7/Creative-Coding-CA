@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://berlu2ggeu1rj" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bf03pqopr4pcu" path="res://instrument.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://u6nkx2tmxgc3" path="res://controller.gd" id="3_h2yge"]
 
 [node name="Main" type="Node2D" unique_id=255669325]
 script = ExtResource("1_ig7tw")
@@ -10,5 +11,24 @@ script = ExtResource("1_ig7tw")
 script = ExtResource("2_0xm2m")
 
 [node name="Label" type="Label" parent="Instrument" unique_id=1949274392]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Controller" type="Node2D" parent="." unique_id=1934553471]
+script = ExtResource("3_h2yge")
+
+[node name="ModeTabs" type="TabContainer" parent="Controller" unique_id=1584930329]
+offset_right = 8.0
+offset_bottom = 40.0
+current_tab = 0
+
+[node name="Piano" type="VBoxContainer" parent="Controller/ModeTabs" unique_id=1110832823]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Keys" type="HBoxContainer" parent="Controller/ModeTabs/Piano" unique_id=339731647]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controller" unique_id=1998075370]
 offset_right = 40.0
 offset_bottom = 23.0
