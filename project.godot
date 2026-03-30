@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="CC26_CA"
+run/main_scene="uid://bu8f6htd1x24t"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
