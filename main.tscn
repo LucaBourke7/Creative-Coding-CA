@@ -8,6 +8,11 @@
 [node name="Main" type="Node2D" unique_id=255669325]
 script = ExtResource("1_ig7tw")
 
+[node name="Background" type="ColorRect" parent="." unique_id=898749654]
+offset_right = 1138.0
+offset_bottom = 624.0
+color = Color(0.7618501, 0.908355, 0.96299404, 1)
+
 [node name="Instrument" type="Node2D" parent="." unique_id=1814646349]
 script = ExtResource("2_0xm2m")
 
