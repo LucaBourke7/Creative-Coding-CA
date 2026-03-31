@@ -19,7 +19,67 @@ var _note_label: Label
 @onready var piano_container: HBoxContainer = $ModeTabs/Piano/Keys
 
 func _ready() -> void:
+	_build_piano()
 	$ModeTabs.tabs_visible = false
+
+func _build_piano() -> void:
+	if not piano_container:
+		return
+
+	var piano_tab = $ModeTabs/Piano
+
+	var oct_label := Label.new()
+	oct_label.text = "Octave: 0"
+	oct_label.custom_minimum_size = Vector2(90, 30)
+	oct_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	var oct_down := Button.new()
+	oct_down.text = "◀ Oct"
+	oct_down.custom_minimum_size = Vector2(80, 30)
+	oct_down.pressed.connect(func():
+		_octave_offset = max(-3, _octave_offset - 1)
+		oct_label.text = "Octave: %d" % _octave_offset
+	)
+
+	var oct_up := Button.new()
+	oct_up.text = "Oct ▶"
+	oct_up.custom_minimum_size = Vector2(80, 30)
+	oct_up.pressed.connect(func():
+		_octave_offset = min(3, _octave_offset + 1)
+		oct_label.text = "Octave: %d" % _octave_offset
+	)
+
+	var octave_row := HBoxContainer.new()
+	octave_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	octave_row.add_child(oct_down)
+	octave_row.add_child(oct_label)
+	octave_row.add_child(oct_up)
+	piano_tab.add_child(octave_row)
+	piano_tab.move_child(octave_row, 0)
+
+	var white_notes := [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
+	for offset in white_notes:
+		var note = 60 + offset
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(36, 100)
+
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color.WHITE
+		style.border_color = Color(0.5, 0.5, 0.5)
+		style.set_border_width_all(1)
+		btn.add_theme_stylebox_override("normal", style)
+
+		var hover_style := style.duplicate() as StyleBoxFlat
+		hover_style.bg_color = Color(0.8, 1.0, 0.9)
+		btn.add_theme_stylebox_override("hover", hover_style)
+
+		var pressed_style := style.duplicate() as StyleBoxFlat
+		pressed_style.bg_color = Color(0.3, 1.0, 0.6)
+		btn.add_theme_stylebox_override("pressed", pressed_style)
+
+		btn.button_down.connect(_on_piano_key_down.bind(note))
+		btn.button_up.connect(_on_piano_key_up.bind(note))
+		piano_container.add_child(btn)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
@@ -35,3 +95,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif not event.pressed:
 		_pressed_keys.erase(key)
 		emit_signal("note_off", note)
+		
+func _on_piano_key_down(note: int) -> void:
+	emit_signal("note_on", note + _octave_offset * 12, 0.9)
+
+func _on_piano_key_up(note: int) -> void:
+	emit_signal("note_off", note + _octave_offset * 12)
