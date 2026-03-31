@@ -20,7 +20,21 @@ var _note_label: Label
 
 func _ready() -> void:
 	_build_piano()
+	_build_note_label()
 	$ModeTabs.tabs_visible = false
+
+func _build_note_label() -> void:
+	var bg := Panel.new()
+	bg.position = Vector2(217, 160)
+	bg.size = Vector2(120, 80)
+	add_child(bg)
+
+	_note_label = Label.new()
+	_note_label.text = ""
+	_note_label.position = Vector2(235, 150)
+	_note_label.add_theme_font_size_override("font_size", 64)
+	_note_label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.6))
+	add_child(_note_label)
 
 func _build_piano() -> void:
 	if not piano_container:
@@ -81,6 +95,11 @@ func _build_piano() -> void:
 		btn.button_up.connect(_on_piano_key_up.bind(note))
 		piano_container.add_child(btn)
 
+func _get_note_name(note: int) -> String:
+	var note_name = NOTE_NAMES[note % 12]
+	var octave = (note / 12.0) - 1
+	return "%s%d" % [note_name, octave]
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
 		return
@@ -91,13 +110,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.pressed and not event.echo:
 		if key not in _pressed_keys:
 			_pressed_keys[key] = true
+			if _note_label:
+				_note_label.text = _get_note_name(note)
 			emit_signal("note_on", note, 0.8)
 	elif not event.pressed:
 		_pressed_keys.erase(key)
+		if _pressed_keys.is_empty() and _note_label:
+			_note_label.text = ""
 		emit_signal("note_off", note)
-		
+
 func _on_piano_key_down(note: int) -> void:
+	if _note_label:
+		_note_label.text = _get_note_name(note + _octave_offset * 12)
 	emit_signal("note_on", note + _octave_offset * 12, 0.9)
 
 func _on_piano_key_up(note: int) -> void:
+	if _note_label:
+		_note_label.text = ""
 	emit_signal("note_off", note + _octave_offset * 12)
