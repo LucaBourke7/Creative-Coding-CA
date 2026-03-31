@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://berlu2ggeu1rj" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bf03pqopr4pcu" path="res://instrument.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://u6nkx2tmxgc3" path="res://controller.gd" id="3_h2yge"]
+[ext_resource type="FontFile" uid="uid://gie7hdliltt2" path="res://BebasNeue-Regular.ttf" id="3_lquwl"]
 [ext_resource type="Script" uid="uid://d0kqs8u6nx6px" path="res://fx_rack.gd" id="4_1bvp3"]
 
 [node name="Main" type="Node2D" unique_id=255669325]
@@ -11,16 +12,21 @@ script = ExtResource("1_ig7tw")
 [node name="Background" type="ColorRect" parent="." unique_id=898749654]
 offset_right = 1138.0
 offset_bottom = 624.0
-color = Color(0.7618501, 0.908355, 0.96299404, 1)
+color = Color(0, 0, 0, 0.003921569)
 
 [node name="Instrument" type="Node2D" parent="." unique_id=1814646349]
+position = Vector2(10, 10)
 script = ExtResource("2_0xm2m")
 
 [node name="Label" type="Label" parent="Instrument" unique_id=1949274392]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 170.0
+offset_right = 210.0
+offset_bottom = 120.0
+theme_override_fonts/font = ExtResource("3_lquwl")
+theme_override_font_sizes/font_size = 100
 
 [node name="Controller" type="Node2D" parent="." unique_id=1934553471]
+position = Vector2(10, 150)
 script = ExtResource("3_h2yge")
 
 [node name="ModeTabs" type="TabContainer" parent="Controller" unique_id=1584930329]
@@ -40,6 +46,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="FXRack" type="Node2D" parent="." unique_id=1472988469]
+position = Vector2(590, 50)
 script = ExtResource("4_1bvp3")
 
 [node name="Container" type="VBoxContainer" parent="FXRack" unique_id=1394115559]
